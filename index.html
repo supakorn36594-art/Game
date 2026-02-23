@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ปรับโทนภาษาไทย</title>
+<style>
+body{
+    font-family: "Prompt", sans-serif;
+    background:#f5f6f8;
+    padding:30px;
+}
+.container{
+    max-width:900px;
+    margin:auto;
+}
+h1{
+    font-size:24px;
+}
+textarea{
+    width:100%;
+    padding:15px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:16px;
+    resize:none;
+}
+.tone-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+.tone-btn{
+    padding:15px;
+    border-radius:12px;
+    border:2px solid #ddd;
+    background:white;
+    cursor:pointer;
+    transition:0.2s;
+}
+.tone-btn:hover{
+    border-color:#ff9800;
+}
+.tone-btn.active{
+    border-color:#ff9800;
+    background:#fff3e0;
+}
+.result-box{
+    margin-top:25px;
+}
+.copy-btn{
+    margin-top:10px;
+    padding:8px 15px;
+    background:#ff9800;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>✨ ปรับโทนภาษาไทย</h1>
+
+    <h3>ข้อความต้นฉบับ</h3>
+    <textarea id="inputText" rows="4" placeholder="พิมพ์ข้อความที่นี่..."></textarea>
+
+    <h3>เลือกโทนที่ต้องการ</h3>
+    <div class="tone-grid">
+        <div class="tone-btn" data-tone="formal">🎩 สุภาพทางการ</div>
+        <div class="tone-btn" data-tone="official">🏢 กึ่งทางการ</div>
+        <div class="tone-btn" data-tone="friendly">😊 เป็นกันเอง</div>
+        <div class="tone-btn" data-tone="kids">🧒 สำหรับเด็ก</div>
+        <div class="tone-btn" data-tone="elder">👵 สำหรับผู้สูงอายุ</div>
+        <div class="tone-btn" data-tone="work">💼 สำหรับที่ทำงาน</div>
+        <div class="tone-btn" data-tone="correct">✏️ ตรวจคำผิด</div>
+        <div class="tone-btn" data-tone="standard">📘 ภาษากลาง</div>
+    </div>
+
+    <div class="result-box">
+        <h3>ผลลัพธ์</h3>
+        <textarea id="outputText" rows="4" readonly></textarea>
+        <button class="copy-btn" onclick="copyText()">📋 คัดลอก</button>
+    </div>
+</div>
+
+<script>
+
+const inputText = document.getElementById("inputText");
+const outputText = document.getElementById("outputText");
+const buttons = document.querySelectorAll(".tone-btn");
+
+buttons.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        buttons.forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        transformText(btn.dataset.tone);
+    });
+});
+
+function transformText(tone){
+    let text = inputText.value.trim();
+    if(!text){
+        outputText.value = "";
+        return;
+    }
+
+    switch(tone){
+        case "formal":
+            outputText.value = "เรียนท่านผู้รับสาร" + 
+            text.replace("ว่างป่ะ","สะดวกหรือไม่") +
+            "ขอแสดงความนับถือ";
+            break;
+
+        case "official":
+            outputText.value = text + " รบกวนพิจารณาด้วยครับ/ค่ะ";
+            break;
+
+        case "friendly":
+            outputText.value = text.replace("ครับ","").replace("ค่ะ","") + " 😊";
+            break;
+
+        case "kids":
+            outputText.value = text + " นะจ๊ะ เด็ก ๆ 😊";
+            break;
+
+        case "elder":
+            outputText.value = "เรียนคุณลุง/คุณป้า " + text + " ครับ/ค่ะ";
+            break;
+
+        case "work":
+            outputText.value = text + " รบกวนแจ้งกลับภายในวันนี้ครับ/ค่ะ";
+            break;
+
+        case "correct":
+            outputText.value = text
+            .replace("ป่ะ","หรือไม่")
+            .replace("มั้ย","ไหม");
+            break;
+
+        case "standard":
+            outputText.value = text;
+            break;
+
+        default:
+            outputText.value = text;
+    }
+}
+
+function copyText(){
+    outputText.select();
+    document.execCommand("copy");
+    alert("คัดลอกแล้ว!");
+}
+
+</script>
+
+</body>
+</html>
